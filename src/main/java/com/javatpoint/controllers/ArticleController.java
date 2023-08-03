@@ -11,12 +11,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.javatpoint.beans.article;
-import com.javatpoint.dao.ArticleDao;
+//import com.javatpoint.dao.ArticleDao;
+import com.javatpoint.mapper.ArticleMapper;
 
 @Controller  
 public class ArticleController {  
-    @Autowired  
-    ArticleDao dao;//will inject dao from xml file  
+	
+	private ArticleMapper mapper;
+//    @Autowired  
+//    ArticleDao dao;//will inject dao from xml file  
+    
+    public ArticleController(ArticleMapper mapper) {
+    	this.mapper = mapper;
+    }
       
     /*It displays a form to input data, here "command" is a reserved request attribute 
      *which is used to display object data into form 
@@ -31,13 +38,13 @@ public class ArticleController {
      *  because default request is GET*/  
     @RequestMapping(value="/save",method = RequestMethod.POST)  
     public String save(@ModelAttribute("article") article article){  
-        dao.save(article);  
+        mapper.save(article);  
         return "redirect:/viewarticle";//will redirect to viewarticle request mapping  
     }  
     /* It provides list of articles in model object */  
     @RequestMapping("/viewarticle")  
     public String viewarticle(Model m){  
-        List<article> list=dao.getArticles();  
+        List<article> list=mapper.getArticles();  
         m.addAttribute("list",list);
         return "viewarticle";  
     }  
@@ -45,20 +52,20 @@ public class ArticleController {
      * The @PathVariable puts URL data into variable.*/  
     @RequestMapping(value="/editarticle/{id}")  
     public String edit(@PathVariable int id, Model m){  
-        article article=dao.getArticleById(id);  
+        article article=mapper.getArticleById(id);  
         m.addAttribute("command",article);
         return "articleeditform";  
     }  
     /* It updates model object. */  
     @RequestMapping(value="/editsave",method = RequestMethod.POST)  
     public String editsave(@ModelAttribute("article") article article){  
-        dao.update(article);  
+        mapper.update(article);  
         return "redirect:/viewarticle";  
     }  
     /* It deletes record for the given id in URL and redirects to /viewarticle */  
     @RequestMapping(value="/deletearticle/{id}",method = RequestMethod.GET)  
     public String delete(@PathVariable int id){  
-        dao.delete(id);  
+        mapper.delete(id);  
         return "redirect:/viewarticle";  
     }   
 }  
