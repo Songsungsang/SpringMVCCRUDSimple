@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <body>
-		<h1>Edit Employee</h1>
+		<h1>Edit Article</h1>
        <form:form method="POST" action="/SpringMVCCRUDSimple/editsave">  
       	<table >  
       	<tr>
